@@ -48,3 +48,8 @@ public:
     }
 };
 
+int main() {
+    std::vector<int> min_cut;
+
+    return 0;
+}

@@ -1,0 +1,5 @@
+*.[oa]
+build/	#ignore all files in the build/ directory
+/TODO	#ignore only the TODO file, not subdir/TODO
+*.exe
+*.obj

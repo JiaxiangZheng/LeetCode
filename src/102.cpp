@@ -17,31 +17,23 @@
  */
 class Solution {
 public:
-    vector< vector<int> > levelOrder(TreeNode *root) 
-    {
+    void recoverTree(TreeNode *root) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-        std::vector< std::vector<int> > orderResult;
-        if (root == NULL) return orderResult;
-        queue<TreeNode*> Q;
-        Q.push(root);
-        Q.push(NULL);
-        orderResult.push_back(std::vector<int>());
-        while (!Q.empty()) {
-            if (Q.front() == NULL) { //
-                orderResult.push_back(std::vector<int>());
-                Q.pop();
-                continue;
-            }
-            TreeNode* frontNode = Q.front(); Q.pop();
-            if (frontNode->left) Q.push(frontNode->left);
-            if (frontNode->right) Q.push(frontNode->right);
-            if (Q.front() == NULL) Q.push(NULL);
-            orderResult.back().push_back(frontNode->val);
+        std::vector<TreeNode*> l;
+        std::vector<int> vals;
+        inorder(root, l, vals);
+        std::sort(vals.begin(), vals.end());
+        for (int i=0; i<l.size(); ++i) {
+            l[i]->val = vals[i];
         }
-        orderResult.erase(orderResult.end()-1);
-        orderResult.erase(orderResult.end()-1);
-        return orderResult;
+    }
+    void inorder(TreeNode* root, std::vector<TreeNode*>& l, std::vector<int>& val) {
+        if (root == NULL) return;
+        inorder (root->left, l, val);
+        l.push_back(root); val.push_back(root->val);
+        inorder (root->right, l, val);
+        return;
     }
 };
 

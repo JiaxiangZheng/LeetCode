@@ -5,7 +5,7 @@
 
     The solution is refered to here : http://leetcode.com/2012/01/palindrome-number.html
 */
-
+/*
 class Solution {
 public:
     bool isPalindrome(int x, int &y) {
@@ -66,4 +66,30 @@ public:
         return true;
     }
 };
+*/
+#include <stack>
+#include <iostream>
+#include <cassert>
+using namespace std;
 
+bool isPalindrome(int value) {
+    if (value < 0) return false;
+    std::stack<int> s;
+    int temp = value;
+    while (temp > 0) {
+        s.push(temp % 10);
+        temp /= 10;
+    }
+    while (!s.empty()) {
+        if (s.top() != value % 10) return false;
+        value /= 10;
+        s.pop();
+    }
+    return true;
+}
+int main() {
+    int value;
+    while (cin >> value) {
+        cout << isPalindrome(value) << endl;
+    }
+}

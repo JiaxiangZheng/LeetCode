@@ -1,0 +1,56 @@
+<p>链表操作是最常用的基本数据结构之一，而常见的面试题中，关于链表的算法题也是不少， 因此在这里记一下链表的常用操作，这里主要是参考了 <a href="http://cslibrary.stanford.edu/105/LinkedListProblems.pdf">http://cslibrary.stanford.edu/105/LinkedListProblems.pdf</a> 的内容。</p>
+<p>按照链表结点中指针的行为，可以分为单链表（每个指针指向下一个结点，尾结点指针指向 空），循环单链表（同单链表，只是尾结点指针指向头结点），双向循环单链表（每个结点 中包含两个指针，分别指向前后两个元素）。当然，它们各有优缺点，比如单链表中如果要 找到尾结点，就需要线性复杂度，而双向循环单链表则只需要常数时间。</p>
+<p>下面的常用操作中，如不作说明指的是单链表。其结构定义如下：</p>
+<pre><code>struct SLinkNode {
+    SLinkNode *next;
+    int        data;
+};
+typedef SLinkNode* SList;</code></pre>
+<p>插入删除结点的操作是比较简单的，需要特别注意的地方是插入时需要判断表是否为空，而 删除的时候，要先找到待删除结点的前一个结点，然后将前一结点的<code>next</code>域指向待删除结 点的下一个，有一个小trick当下一个结点不空时交换待删除结点与下一个结点的值，然后 删除下一结点，这样就是常数时间复杂度了了。这里就不再赘述。</p>
+<p>下面正式开始几个比较常见的链表相关的题。</p>
+<h4 id="链表反向">链表反向</h4>
+<p>要遍历链表一次是显然的，如何做到<code>O(1)</code>的空间下进行反向呢？假设我们已经把链表一分 为二，前半部分已经反向，而且我们知道当前结点的前一结点为前半部分反向链表的表头， 那么只需要保存下一结点，并将当前结点指向那个表头，然后更新当前结点到下一结点，迭 代处理这个过程即可。</p>
+<pre><code>SList* reverseList(SList&amp; L) {
+    if (L == NULL || L-&gt;next == NULL) return head;
+    SLinkNode *pre = NULL, *cur = L, *next = NULL;
+    while (cur != NULL) {
+        next = cur-&gt;next;
+        cur-&gt;next = pre;
+        pre = cur;
+        cur = next;
+    }
+    return pre;
+}</code></pre>
+<h4 id="返回第k个结点">返回第K个结点</h4>
+<p>顺序地返回第K个结点，只需要注意K一定要在表的长度范围之内。然后求表长是一个线性复 杂度，因此，可以避免求表长而直接移动指针的同时递减K值，当K大于0而指针已指向空的 时候，就说明K是大于表长的。（<em>PS：这里的K从0开始</em>）</p>
+<pre><code>const SLinkNode* getKthNode(const SList&amp; L, int K) {
+    assert (K &gt;= 0 &amp;&amp; L != NULL);
+    const SLinkNode* cur = L;
+    while (K &gt; 0) {
+        K--;
+        cur = cur-&gt;next;
+        if (cur = NULL) break;
+    }
+    return cur;
+}</code></pre>
+<h4 id="返回倒数第k个结点">返回倒数第K个结点</h4>
+<p>要返回倒数第K个结点，那么不就是返回第<code>len(L)-K-1</code>个结点么。可惜，在这种情况下我 们需要先遍历链表求得表长，这样的话时间复杂度为<code>O(2*len(L)-K)</code>。那么这里面还有没 有优化的可能呢？事实上可以设置两个指针（称快指针和慢指针），让快指针先走K-1步，然 后两个指针同步向后移动，当快指针指向NULL的时候，慢指针指向的就是倒数第K个结点了 ，这时复杂度为<code>O(len(L))</code>。<em>PS：这里K从1开始</em></p>
+<pre><code>const SLinkNode* getBackKthNode(const SList&amp; L, int K) {
+    assert (K &gt;= 0 &amp;&amp; L != NULL);
+    const SLinkNode *p_fast = L, *p_slow = L;
+    for (int i=1; i&lt;K; ++i) p_fast = p_fast-&gt;next;
+    while (p_fast-&gt;next != NULL) {
+        p_fast = p_fast-&gt;next;
+        p_slow = p_slow-&gt;next;
+    }
+    return p_slow;
+}</code></pre>
+<h4 id="删除链表">删除链表</h4>
+<p>可以考虑递归地删除，或者为了消除尾递归，多加一个<code>next</code>指针，每次删除完当前结点后 ，重新置当前指针为<code>next</code>域，同时更新<code>next</code>域。注意，别忘了把链表头结点置为NULL以 防止野指针的出现。</p>
+<h4 id="插入排序">插入排序</h4>
+<h4 id="归并排序">归并排序</h4>
+<hr />
+<p><strong>下面是最后一个压轴题</strong></p>
+<h4 id="二叉树到双向循环链表的转换">二叉树到双向循环链表的转换</h4>
+<p>由于双向链表结点中包含两个指针，而二叉树也包含两个指针，所以本质上它们结点的结构 类似（但整体结构不同，一个是线性的，一个是非线性的）。那么，一个很自然的问题是， 如何将一个有序二叉树转化为双向循环链表呢？（只改变其指针的指向，时间复杂度要求 <code>O(n)</code>，空间复杂度要求最多只能显式地使用常量空间）。</p>
+<p>这个问题出现在<a href="http://www.leetcode.com">LeetCode</a>中，而<a href="http://cslibrary.stanford.edu/109/TreeListRecursion.html">这里</a>也有这个问题的描述。</p>

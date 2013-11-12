@@ -1,13 +1,6 @@
-/*  
-    http://leetcode.com/onlinejudge#question_003
-
-    Given a string, find the length of the longest substring without repeating
-    characters. For example, the longest substring without repeating letters for
-    "abcabcbb" is "abc", which the length is 3. For "bbbbb" the longest substring is
-    "b", with the length of 1.
-*/
 // using DP : L[i] = max{L[i-1], sub_str.length()+1}, sub_str is the maximum
 // substring of S[k, i] that contains different characters 
+#if 0
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
@@ -31,4 +24,39 @@ public:
         return len_longest_substr[s.length() - 1];
     }
 };
+#endif
+#include <utility>
+#include <algorithm>
+#include <string>
+#include <iostream>
+using namespace std;
 
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        const int CHAR_SET_SIZE = 256;
+        int hash[CHAR_SET_SIZE];
+        for (int i=0; i<CHAR_SET_SIZE; ++i) {
+            hash[i] = -1;
+        }
+        int maxlen = 0, beg = 0;
+        for (int i=0; i<s.size(); ++i) {
+            if (hash[s[i]] != -1 && hash[s[i]] >= beg) {
+                beg = hash[s[i]] + 1;
+            }
+            hash[s[i]] = i;
+            maxlen = std::max(maxlen, i - beg + 1);
+            printf("%d\t%d\t%d\n", i, beg, maxlen);
+        }
+        return maxlen;
+    }
+};
+
+int main() {
+    Solution s;
+    string str;
+    while (cin >> str) {
+        cout << s.lengthOfLongestSubstring(str) << endl;
+    }
+    return 0;
+}

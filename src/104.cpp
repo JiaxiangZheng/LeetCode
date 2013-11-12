@@ -13,7 +13,9 @@ public:
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
         if (!root) return 0;
-        return std::max(maxDepth(root->left), maxDepth(root->right))+1;
+        int lenLeft = maxDepth(root->left);
+        int lenRight = maxDepth(root->right);
+        return std::max(lenLeft, lenRight)+1;
     }
 };
 

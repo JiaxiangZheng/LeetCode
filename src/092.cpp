@@ -11,28 +11,22 @@ public:
     ListNode *reverseBetween(ListNode *head, int m, int n) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-        ListNode* cur = head, *pre = NULL;
-        for (int i=1; i<m; ++i) {
-            pre = cur; 
-            cur = cur->next;
-        }
-        ListNode* newHead = reverse(cur, pre, n-m+1);
-        if (pre == NULL) {
-            head = newHead;
-        }
-        return head;
+        
+        // index to the m-th node
+
+        n = n - m + 1;
     }
-private:
-    ListNode* reverse(ListNode* head, ListNode* pre, int length) {
-        if (length <= 1) return head;
-        ListNode* cur = head; 
-        for (int i=0; i<length; ++i) {
+    ListNode* reverseN(ListNode* head, int n) {
+        ListNode* tail = head;
+        ListNode *prev = NULL, *cur = head;
+        for (int i=1; i<n; ++i) {
             ListNode* next = cur->next;
-            cur->next = pre;
-            pre = cur;
+            cur->next = prev;
+            prev = cur;
             cur = next;
         }
-        head->next = cur->next;
-    }    
+        tail->next = cur->next;
+        return cur;
+    }
 };
 

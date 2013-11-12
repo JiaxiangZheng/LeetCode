@@ -1,10 +1,3 @@
-/*
-    http://leetcode.com/onlinejudge#question_101      
-
-    Given a binary tree, check whether it is a mirror of itself (ie, symmetric
-    around its center
-*/
-
 /**
  * Definition for binary tree
  * struct TreeNode {

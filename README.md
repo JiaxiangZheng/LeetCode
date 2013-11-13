@@ -1,7 +1,12 @@
-This is my Solution to LeetCode
+## README
 
-I use the problem ID as the filename, and the comment in the file includes the description and the hyper-link to the problem.
+This is my Solution to [LeetCode].
 
-The file [Info.txt](./src/Info.txt) is a classification of the problems I have already solved.
+I use the problem ID as the filename, and the comment in the file includes the
+description and the hyper-link to the problem.
+
+The file [problem_info.xlsx](./problem_info.xlsx) is a classification of the
+problems.
 
 
+[LeetCode]: http://oj.leetcode.com/problems/
